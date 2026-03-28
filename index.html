@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Salary & OT Calculator</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 980px;
+      margin: 30px auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #1e40af, #3b82f6);
+      color: white;
+      padding: 35px 30px;
+      text-align: center;
+      position: relative;
+    }
+
+    .header h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      animation: fadeInDown 0.8s ease;
+    }
+
+    .header p {
+      opacity: 0.95;
+      font-size: 1.1rem;
+      margin-top: 8px;
+      animation: fadeInDown 1s ease;
+    }
+
+    .content {
+      padding: 40px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-bottom: 35px;
+    }
+
+    .input-group {
+      animation: fadeInUp 0.6s ease backwards;
+    }
+
+    .input-group:nth-child(1) { animation-delay: 0.1s; }
+    .input-group:nth-child(2) { animation-delay: 0.2s; }
+    .input-group:nth-child(3) { animation-delay: 0.3s; }
+    .input-group:nth-child(4) { animation-delay: 0.4s; }
+    .input-group:nth-child(5) { animation-delay: 0.5s; }
+    .input-group:nth-child(6) { animation-delay: 0.6s; }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #374151;
+      font-size: 1rem;
+    }
+
+    .input-group input, .input-group select {
+      width: 100%;
+      padding: 14px 18px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      transition: all 0.3s ease;
+    }
+
+    .input-group input:focus, .input-group select:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+      transform: translateY(-2px);
+    }
+
+    button {
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: white;
+      padding: 16px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 15px;
+      transition: all 0.4s ease;
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+      animation: fadeInUp 0.7s ease;
+    }
+
+    button:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 15px 30px rgba(37, 99, 235, 0.4);
+    }
+
+    .result {
+      margin-top: 40px;
+      background: #f8fafc;
+      border-radius: 16px;
+      padding: 32px;
+      border: 1px solid #e2e8f0;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+
+    .result.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section-title {
+      font-size: 1.28rem;
+      font-weight: 700;
+      color: #1e40af;
+      margin: 28px 0 16px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid #bfdbfe;
+      animation: fadeInLeft 0.5s ease;
+    }
+
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 1.02rem;
+      transition: all 0.3s ease;
+    }
+
+    .result-row:hover {
+      background: #f1f5f9;
+      padding-left: 12px;
+      border-radius: 8px;
+    }
+
+    .highlight {
+      background: linear-gradient(90deg, #dbeafe, #bfdbfe);
+      padding: 18px 22px;
+      border-radius: 12px;
+      margin: 18px 0;
+      font-size: 1.18rem;
+      font-weight: 700;
+      animation: fadeInUp 0.6s ease;
+    }
+
+    .net-salary {
+      background: linear-gradient(135deg, #10b981, #34d399);
+      color: white;
+      padding: 20px 24px;
+      border-radius: 14px;
+      margin-top: 25px;
+      font-size: 1.4rem;
+      font-weight: 700;
+      animation: fadeInUp 0.8s ease;
+    }
+
+    .value {
+      font-family: monospace;
+      font-weight: 700;
+      color: #1e3a8a;
+    }
+
+    .deduction { color: #ef4444; }
+
+    /* Creator Section */
+    .creator {
+      margin-top: 50px;
+      padding: 25px;
+      background: #f8fafc;
+      border-radius: 16px;
+      border: 1px solid #e2e8f0;
+      text-align: center;
+      animation: fadeInUp 1s ease;
+    }
+
+    .creator h3 {
+      color: #1e40af;
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+
+    .creator p {
+      color: #64748b;
+      font-size: 1.02rem;
+    }
+
+    .creator a {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .creator a:hover {
+      text-decoration: underline;
+    }
+
+    /* Animations */
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInLeft {
+      from { opacity: 0; transform: translateX(-30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .footer {
+      text-align: center;
+      padding: 25px;
+      color: #64748b;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>💰 Salary & OT Calculator</h1>
+      <p>Professional & Accurate Payroll Tool</p>
+    </div>
+
+    <div class="content">
+      <div class="form-grid">
+        <div class="input-group">
+          <label>Current Basic Salary (LKR)</label>
+          <input type="number" id="basic" value="0" step="0.01">
+        </div>
+        <div class="input-group">
+          <label>Current Gross Salary (LKR)</label>
+          <input type="number" id="currentGross" value="0" step="0.01">
+        </div>
+        <div class="input-group">
+          <label>Increment Percentage (%)</label>
+          <input type="number" id="incrementPercent" value="0" step="0.01">
+        </div>
+        <div class="input-group">
+          <label>Employee Level</label>
+          <select id="employeeLevel">
+            <option value="240">Officer Level (240 hours)</option>
+            <option value="200">Assistant Level (200 hours)</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>No. of Normal OT Hours</label>
+          <input type="number" id="normalOT" value="0" step="0.5">
+        </div>
+        <div class="input-group">
+          <label>No. of Double OT Hours</label>
+          <input type="number" id="doubleOT" value="0" step="0.5">
+        </div>
+      </div>
+
+      <button onclick="calculateSalary()">Calculate Salary</button>
+
+      <div class="result" id="result">
+        <h2 class="section-title">📈 Increment & Basic Salary</h2>
+        <div class="result-row">
+          <span>Increment Amount (Current Gross × %)</span>
+          <span class="value" id="incAmount">0.00</span>
+        </div>
+        <div class="result-row">
+          <span>New Basic Salary</span>
+          <span class="value" id="newBasic">0.00</span>
+        </div>
+
+        <h2 class="section-title">📊 Gross Salary Before OT</h2>
+        <div class="highlight">
+          <span>Gross Salary Before OT</span>
+          <span class="value" id="grossBeforeOT" style="float: right;">0.00</span>
+        </div>
+
+        <h2 class="section-title">⏰ Overtime Calculation</h2>
+        <div class="result-row">
+          <span>Working Hours Used</span>
+          <span class="value" id="workingHours">240</span>
+        </div>
+        <div class="result-row">
+          <span>Normal OT Rate / Hour</span>
+          <span class="value" id="normalRate">0.00</span>
+        </div>
+        <div class="result-row">
+          <span>Double OT Rate / Hour</span>
+          <span class="value" id="doubleRate">0.00</span>
+        </div>
+        <div class="result-row">
+          <span>Normal OT Amount</span>
+          <span class="value" id="normalOTAmount">0.00</span>
+        </div>
+        <div class="result-row">
+          <span>Double OT Amount</span>
+          <span class="value" id="doubleOTAmount">0.00</span>
+        </div>
+        <div class="highlight">
+          <span>Total OT Amount</span>
+          <span class="value" id="totalOT" style="float: right;">0.00</span>
+        </div>
+
+        <h2 class="section-title">💵 Final Calculation</h2>
+        <div class="result-row">
+          <span>Final Gross Salary</span>
+          <span class="value" id="finalGross">0.00</span>
+        </div>
+
+        <div class="result-row deduction">
+          <span>8% Deduction</span>
+          <span class="value" id="percentDeduction">0.00</span>
+        </div>
+        <div class="result-row deduction">
+          <span>Welfare Deduction</span>
+          <span class="value">99.00</span>
+        </div>
+
+        <div class="highlight" style="background: #fee2e2; color: #991b1b;">
+          <span>Total Deductions</span>
+          <span class="value" id="totalDeductions" style="float: right;">0.00</span>
+        </div>
+
+        <div class="net-salary">
+          <span>Net Salary</span>
+          <span class="value" id="netSalary" style="float: right;">0.00</span>
+        </div>
+      </div>
+
+      <!-- Creator Section -->
+      <div class="creator">
+        <h3>👨‍💻 About the Creator</h3>
+        <p>
+          Developed by <strong>Nisitha Wijerathna</strong><br>
+          <a href="mailto:nisithawijerathna@hotmail.com">nisithawijerathna@hotmail.com</a>
+        </p>
+        <p style="margin-top: 12px; font-size: 0.95rem;">
+          Professional Salary & Overtime Calculator for Sri Lankan Payroll
+        </p>
+      </div>
+    </div>
+
+    <div class="footer">
+      LKR • All calculations based on selected working hours • 
+      <span style="color: #3b82f6;">Made with ❤️ in Sri Lanka</span>
+    </div>
+  </div>
+
+  <script>
+    function calculateSalary() {
+      const btn = document.querySelector('button');
+      const originalText = btn.textContent;
+      btn.textContent = "Calculating...";
+      btn.disabled = true;
+
+      // Get inputs
+      let basic = parseFloat(document.getElementById('basic').value) || 0;
+      let currentGross = parseFloat(document.getElementById('currentGross').value) || 0;
+      let incPercent = parseFloat(document.getElementById('incrementPercent').value) || 0;
+      let normalHours = parseFloat(document.getElementById('normalOT').value) || 0;
+      let doubleHours = parseFloat(document.getElementById('doubleOT').value) || 0;
+      let workingHours = parseFloat(document.getElementById('employeeLevel').value);
+
+      // Increment Calculation
+      let incrementAmount = currentGross * (incPercent / 100);
+      let newBasic = basic + incrementAmount;
+
+      // Gross Before OT
+      let grossBeforeOT = newBasic + (currentGross - basic);
+
+      // OT Calculation
+      let hourlyRate = newBasic / workingHours;
+      let normalOTRate = hourlyRate * 1.5;
+      let doubleOTRate = hourlyRate * 2;
+
+      let normalOTAmount = normalOTRate * normalHours;
+      let doubleOTAmount = doubleOTRate * doubleHours;
+      let totalOT = normalOTAmount + doubleOTAmount;
+
+      let finalGross = grossBeforeOT + totalOT;
+
+      // Deductions
+      let percentDeduction = finalGross * 0.08;
+      let welfare = 99.00;
+      let totalDeductions = percentDeduction + welfare;
+      let netSalary = finalGross - totalDeductions;
+
+      // Update results
+      setTimeout(() => {
+        document.getElementById('incAmount').textContent = incrementAmount.toFixed(2);
+        document.getElementById('newBasic').textContent = newBasic.toFixed(2);
+        document.getElementById('grossBeforeOT').textContent = grossBeforeOT.toFixed(2);
+        document.getElementById('workingHours').textContent = workingHours;
+
+        document.getElementById('normalRate').textContent = normalOTRate.toFixed(2);
+        document.getElementById('doubleRate').textContent = doubleOTRate.toFixed(2);
+        document.getElementById('normalOTAmount').textContent = normalOTAmount.toFixed(2);
+        document.getElementById('doubleOTAmount').textContent = doubleOTAmount.toFixed(2);
+        document.getElementById('totalOT').textContent = totalOT.toFixed(2);
+
+        document.getElementById('finalGross').textContent = finalGross.toFixed(2);
+        document.getElementById('percentDeduction').textContent = percentDeduction.toFixed(2);
+        document.getElementById('totalDeductions').textContent = totalDeductions.toFixed(2);
+        document.getElementById('netSalary').textContent = netSalary.toFixed(2);
+
+        // Show result with animation
+        const resultDiv = document.getElementById('result');
+        resultDiv.classList.add('show');
+
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }, 450);
+    }
+
+    // Auto calculate on Enter
+    document.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') calculateSalary();
+    });
+
+    // Initial load - show result if values are pre-filled
+    window.onload = function() {
+      // Optional: Auto calculate on first load with default values
+      // calculateSalary();
+    };
+  </script>
+</body>
+</html>
