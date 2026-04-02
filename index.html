@@ -170,15 +170,15 @@
       <div class="form-grid">
         <div class="input-group">
           <label>Current Basic Salary (LKR)</label>
-          <input type="number" id="basic" value="0" step="0.01">
+          <input type="number" id="basic" value="58125" step="0.01">
         </div>
         <div class="input-group">
           <label>Current Gross Salary (LKR)</label>
-          <input type="number" id="currentGross" value="0" step="0.01">
+          <input type="number" id="currentGross" value="96000" step="0.01">
         </div>
         <div class="input-group">
           <label>Increment Percentage (%)</label>
-          <input type="number" id="incrementPercent" value="0" step="0.01">
+          <input type="number" id="incrementPercent" value="10" step="0.01">
         </div>
         <div class="input-group">
           <label>Employee Level</label>
@@ -200,13 +200,13 @@
       <button onclick="calculateSalary()">Calculate Salary</button>
 
       <div class="result" id="result">
-        <h2 class="section-title">📈 Increment Breakdown</h2>
+        <h2 class="section-title">📈 Increment Breakdown (60% Basic + 40% Allowance)</h2>
         <div class="result-row">
           <span>Total Increment Amount</span>
           <span class="value" id="incAmount">0.00</span>
         </div>
         <div class="result-row">
-          <span>60% Added to Basic Salary</span>
+          <span>60% Added to Basic</span>
           <span class="value" id="incToBasic">0.00</span>
         </div>
         <div class="result-row">
@@ -252,12 +252,12 @@
 
         <h2 class="section-title">💵 Final Calculation</h2>
         <div class="result-row">
-          <span>Final Gross Salary</span>
+          <span>Final Gross Salary (Before OT + OT)</span>
           <span class="value" id="finalGross">0.00</span>
         </div>
 
         <div class="result-row deduction">
-          <span>8% Deduction</span>
+          <span>8% Deduction (on Gross Before OT)</span>
           <span class="value" id="percentDeduction">0.00</span>
         </div>
         <div class="result-row deduction">
@@ -283,6 +283,9 @@
           Developed by <strong>Nisitha Wijerathna</strong><br>
           <a href="mailto:nisithawijerathna@hotmail.com">nisithawijerathna@hotmail.com</a>
         </p>
+        <p style="margin-top: 8px; font-size: 0.95rem;">
+          Professional Salary & Overtime Calculator for Sri Lankan Payroll
+        </p>
       </div>
     </div>
   </div>
@@ -294,6 +297,7 @@
       btn.textContent = "Calculating...";
       btn.disabled = true;
 
+      // Get inputs
       let basic = parseFloat(document.getElementById('basic').value) || 0;
       let currentGross = parseFloat(document.getElementById('currentGross').value) || 0;
       let incPercent = parseFloat(document.getElementById('incrementPercent').value) || 0;
@@ -301,17 +305,17 @@
       let doubleHours = parseFloat(document.getElementById('doubleOT').value) || 0;
       let workingHours = parseFloat(document.getElementById('employeeLevel').value);
 
-      // Increment Logic
+      // Increment Logic (60% to Basic, 40% to Allowance)
       let totalIncrement = currentGross * (incPercent / 100);
-      let incToBasic = totalIncrement * 0.60;        // 60% to Basic
-      let incToAllowance = totalIncrement * 0.40;    // 40% to Allowances
+      let incToBasic = totalIncrement * 0.60;
+      let incToAllowance = totalIncrement * 0.40;
 
       let newBasic = basic + incToBasic;
 
-      // Gross Salary Before OT = Old Gross + Full Increment
+      // Gross Salary Before OT = Current Gross + Full Increment
       let grossBeforeOT = currentGross + totalIncrement;
 
-      // OT Calculation on New Basic
+      // OT Calculation (based on New Basic)
       let hourlyRate = newBasic / workingHours;
       let normalOTRate = hourlyRate * 1.5;
       let doubleOTRate = hourlyRate * 2;
@@ -320,10 +324,12 @@
       let doubleOTAmount = doubleOTRate * doubleHours;
       let totalOT = normalOTAmount + doubleOTAmount;
 
+      // Final Gross = Gross Before OT + OT Amount
       let finalGross = grossBeforeOT + totalOT;
 
-      // Deductions
-      let percentDeduction = finalGross * 0.08;
+      // === IMPORTANT CHANGE ===
+      // 8% deduction only on Gross Before OT (excluding OT)
+      let percentDeduction = grossBeforeOT * 0.08;
       let welfare = 99.00;
       let totalDeductions = percentDeduction + welfare;
       let netSalary = finalGross - totalDeductions;
@@ -355,6 +361,7 @@
       }, 400);
     }
 
+    // Enter key support
     document.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') calculateSalary();
     });
