@@ -7,11 +7,7 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-    * { 
-      margin: 0; 
-      padding: 0; 
-      box-sizing: border-box; 
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: 'Inter', system-ui, sans-serif;
@@ -34,20 +30,11 @@
       color: white;
       padding: 35px 30px;
       text-align: center;
-      position: relative;
     }
 
     .header h1 {
       font-size: 2.2rem;
       font-weight: 700;
-      animation: fadeInDown 0.8s ease;
-    }
-
-    .header p {
-      opacity: 0.95;
-      font-size: 1.1rem;
-      margin-top: 8px;
-      animation: fadeInDown 1s ease;
     }
 
     .content {
@@ -61,23 +48,11 @@
       margin-bottom: 35px;
     }
 
-    .input-group {
-      animation: fadeInUp 0.6s ease backwards;
-    }
-
-    .input-group:nth-child(1) { animation-delay: 0.1s; }
-    .input-group:nth-child(2) { animation-delay: 0.2s; }
-    .input-group:nth-child(3) { animation-delay: 0.3s; }
-    .input-group:nth-child(4) { animation-delay: 0.4s; }
-    .input-group:nth-child(5) { animation-delay: 0.5s; }
-    .input-group:nth-child(6) { animation-delay: 0.6s; }
-
     .input-group label {
       display: block;
       margin-bottom: 8px;
       font-weight: 600;
       color: #374151;
-      font-size: 1rem;
     }
 
     .input-group input, .input-group select {
@@ -108,12 +83,10 @@
       margin-top: 15px;
       transition: all 0.4s ease;
       box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
-      animation: fadeInUp 0.7s ease;
     }
 
     button:hover {
       transform: translateY(-5px) scale(1.02);
-      box-shadow: 0 15px 30px rgba(37, 99, 235, 0.4);
     }
 
     .result {
@@ -139,7 +112,6 @@
       margin: 28px 0 16px;
       padding-bottom: 10px;
       border-bottom: 3px solid #bfdbfe;
-      animation: fadeInLeft 0.5s ease;
     }
 
     .result-row {
@@ -148,13 +120,6 @@
       padding: 14px 0;
       border-bottom: 1px solid #f1f5f9;
       font-size: 1.02rem;
-      transition: all 0.3s ease;
-    }
-
-    .result-row:hover {
-      background: #f1f5f9;
-      padding-left: 12px;
-      border-radius: 8px;
     }
 
     .highlight {
@@ -164,7 +129,6 @@
       margin: 18px 0;
       font-size: 1.18rem;
       font-weight: 700;
-      animation: fadeInUp 0.6s ease;
     }
 
     .net-salary {
@@ -175,7 +139,6 @@
       margin-top: 25px;
       font-size: 1.4rem;
       font-weight: 700;
-      animation: fadeInUp 0.8s ease;
     }
 
     .value {
@@ -186,7 +149,6 @@
 
     .deduction { color: #ef4444; }
 
-    /* Creator Section */
     .creator {
       margin-top: 50px;
       padding: 25px;
@@ -194,51 +156,6 @@
       border-radius: 16px;
       border: 1px solid #e2e8f0;
       text-align: center;
-      animation: fadeInUp 1s ease;
-    }
-
-    .creator h3 {
-      color: #1e40af;
-      margin-bottom: 10px;
-      font-size: 1.2rem;
-    }
-
-    .creator p {
-      color: #64748b;
-      font-size: 1.02rem;
-    }
-
-    .creator a {
-      color: #2563eb;
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .creator a:hover {
-      text-decoration: underline;
-    }
-
-    /* Animations */
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(40px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes fadeInLeft {
-      from { opacity: 0; transform: translateX(-30px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-
-    .footer {
-      text-align: center;
-      padding: 25px;
-      color: #64748b;
-      font-size: 0.95rem;
     }
   </style>
 </head>
@@ -246,7 +163,7 @@
   <div class="container">
     <div class="header">
       <h1>💰 Salary & OT Calculator</h1>
-      <p>Professional & Accurate Payroll Tool</p>
+      <p>Professional Payroll Tool for Sri Lanka</p>
     </div>
 
     <div class="content">
@@ -283,13 +200,21 @@
       <button onclick="calculateSalary()">Calculate Salary</button>
 
       <div class="result" id="result">
-        <h2 class="section-title">📈 Increment & Basic Salary</h2>
+        <h2 class="section-title">📈 Increment Breakdown</h2>
         <div class="result-row">
-          <span>Increment Amount (Current Gross × %)</span>
+          <span>Total Increment Amount</span>
           <span class="value" id="incAmount">0.00</span>
         </div>
         <div class="result-row">
-          <span>New Basic Salary</span>
+          <span>60% Added to Basic Salary</span>
+          <span class="value" id="incToBasic">0.00</span>
+        </div>
+        <div class="result-row">
+          <span>40% Added to Allowances</span>
+          <span class="value" id="incToAllowance">0.00</span>
+        </div>
+        <div class="result-row">
+          <span><strong>New Basic Salary</strong></span>
           <span class="value" id="newBasic">0.00</span>
         </div>
 
@@ -351,22 +276,14 @@
         </div>
       </div>
 
-      <!-- Creator Section -->
+      <!-- Creator -->
       <div class="creator">
         <h3>👨‍💻 About the Creator</h3>
         <p>
           Developed by <strong>Nisitha Wijerathna</strong><br>
           <a href="mailto:nisithawijerathna@hotmail.com">nisithawijerathna@hotmail.com</a>
         </p>
-        <p style="margin-top: 12px; font-size: 0.95rem;">
-          Professional Salary & Overtime Calculator for Sri Lankan Payroll
-        </p>
       </div>
-    </div>
-
-    <div class="footer">
-      LKR • All calculations based on selected working hours • 
-      <span style="color: #3b82f6;">Made with ❤️ in Sri Lanka</span>
     </div>
   </div>
 
@@ -377,7 +294,6 @@
       btn.textContent = "Calculating...";
       btn.disabled = true;
 
-      // Get inputs
       let basic = parseFloat(document.getElementById('basic').value) || 0;
       let currentGross = parseFloat(document.getElementById('currentGross').value) || 0;
       let incPercent = parseFloat(document.getElementById('incrementPercent').value) || 0;
@@ -385,14 +301,17 @@
       let doubleHours = parseFloat(document.getElementById('doubleOT').value) || 0;
       let workingHours = parseFloat(document.getElementById('employeeLevel').value);
 
-      // Increment Calculation
-      let incrementAmount = currentGross * (incPercent / 100);
-      let newBasic = basic + incrementAmount;
+      // Increment Logic
+      let totalIncrement = currentGross * (incPercent / 100);
+      let incToBasic = totalIncrement * 0.60;        // 60% to Basic
+      let incToAllowance = totalIncrement * 0.40;    // 40% to Allowances
 
-      // Gross Before OT
-      let grossBeforeOT = newBasic + (currentGross - basic);
+      let newBasic = basic + incToBasic;
 
-      // OT Calculation
+      // Gross Salary Before OT = Old Gross + Full Increment
+      let grossBeforeOT = currentGross + totalIncrement;
+
+      // OT Calculation on New Basic
       let hourlyRate = newBasic / workingHours;
       let normalOTRate = hourlyRate * 1.5;
       let doubleOTRate = hourlyRate * 2;
@@ -409,9 +328,11 @@
       let totalDeductions = percentDeduction + welfare;
       let netSalary = finalGross - totalDeductions;
 
-      // Update results
+      // Update UI
       setTimeout(() => {
-        document.getElementById('incAmount').textContent = incrementAmount.toFixed(2);
+        document.getElementById('incAmount').textContent = totalIncrement.toFixed(2);
+        document.getElementById('incToBasic').textContent = incToBasic.toFixed(2);
+        document.getElementById('incToAllowance').textContent = incToAllowance.toFixed(2);
         document.getElementById('newBasic').textContent = newBasic.toFixed(2);
         document.getElementById('grossBeforeOT').textContent = grossBeforeOT.toFixed(2);
         document.getElementById('workingHours').textContent = workingHours;
@@ -427,25 +348,16 @@
         document.getElementById('totalDeductions').textContent = totalDeductions.toFixed(2);
         document.getElementById('netSalary').textContent = netSalary.toFixed(2);
 
-        // Show result with animation
-        const resultDiv = document.getElementById('result');
-        resultDiv.classList.add('show');
+        document.getElementById('result').classList.add('show');
 
         btn.textContent = originalText;
         btn.disabled = false;
-      }, 450);
+      }, 400);
     }
 
-    // Auto calculate on Enter
-    document.addEventListener('keypress', function(e) {
+    document.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') calculateSalary();
     });
-
-    // Initial load - show result if values are pre-filled
-    window.onload = function() {
-      // Optional: Auto calculate on first load with default values
-      // calculateSalary();
-    };
   </script>
 </body>
 </html>
